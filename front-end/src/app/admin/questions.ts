@@ -34,7 +34,7 @@ export const questions = [
     text: 'Qual afirmação é CORRETA quando falamos de TypeScript?',
     options: [
       {id: 1, text: 'É uma linguagem de programação'},
-      {id: 2, text: 'É um superconjunto de JavaScript desenvolvido pela Microsoft'},
+      {id: 2, text: 'É um superconjunto de JavaScript'},
       {id: 3, text: 'É interpertado pelo navegador'},
       {id: 4, text: 'É uma biblioteca do Angular'}
     ],
