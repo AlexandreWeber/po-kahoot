@@ -156,15 +156,15 @@ export class AdminComponent implements OnInit {
   }
 
   startTimer() {
-    // this.timer = 20;
-    // this.timeOut$ = setInterval(() => {
-    //   if (this.timer > 0) {
-    //     this.timer = this.timer - 0.01;
-    //   } else {
-    //     this.timer = 0;
-    //     this.socket.emit('questionEnd', true)
-    //   }
-    // }, 10);
+    this.timer = 20;
+    this.timeOut$ = setInterval(() => {
+      if (this.timer > 0) {
+        this.timer = this.timer - 0.01;
+      } else {
+        this.timer = 0;
+        this.socket.emit('questionEnd', true)
+      }
+    }, 10);
   }
 
   showAnsers() {
