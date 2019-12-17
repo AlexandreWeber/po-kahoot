@@ -1,0 +1,57 @@
+<div class="container">
+  <div *ngIf="userLoaded && !answerStopped && isGameReady">
+    <div class="">
+      <br/>
+      <div class="po-row">
+        <app-answer id="answerOne"
+                    name="answerOne"
+                    class="po-lg-12 po-md-12 po-xl-12 po-sm-12"
+                    color="#0c9abe"
+                    (click)="validateAnswer(question.options[0])"
+                    [option]="question.options[0].text">
+        </app-answer>
+        <app-answer id="answerTwo"
+                    class="po-lg-12 po-md-12 po-xl-12 po-sm-12"
+                    name="answerTwo"
+                    color="#ab4391"
+                    (click)="validateAnswer(question.options[1])"
+                    [option]="question.options[1].text">
+        </app-answer>
+      </div>
+
+      <div class="po-row">
+        <app-answer id="answerThree"
+                    class="po-lg-12 po-md-12 po-xl-12 po-sm-12"
+                    name="answerThree"
+                    color="#ea9b3e"
+                    (click)="validateAnswer(question.options[2])"
+                    [option]="question.options[2].text">
+        </app-answer>
+        <app-answer id="answerFour"
+                    class="po-lg-12 po-md-12 po-xl-12 po-sm-12"
+                    name="answerFour"
+                    color="#abc249"
+                    (click)="validateAnswer(question.options[3])"
+                    [option]="question.options[3].text">
+        </app-answer>
+      </div>
+    </div>
+  </div>
+
+  <div class="next-question-box" *ngIf="answerStopped || !isGameReady || endGame">
+    <p *ngIf="!endGame">{{ !isGameReady ? 'Aguarde o início do jogo': 'Aguarde a próxima pergunta'}}</p>
+    <p *ngIf="endGame">{{ 'Fim de jogo :)'}}</p>
+  </div>
+</div>
+<po-modal #playerInfoModal
+          p-hide-close="true"
+          p-size="sm"
+          [p-primary-action]="primaryAction"
+          p-title="Quem é você?">
+
+  <po-input name="input"
+            (keyup.enter)="savePlayerInfo()"
+            p-label="Digite seu nome"
+            [(ngModel)]="userName">
+  </po-input>
+</po-modal>

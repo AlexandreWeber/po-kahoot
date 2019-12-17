@@ -1,0 +1,47 @@
+<po-page-default p-title="Jogadores"
+                 [p-actions]="pageActions">
+
+  <div class="po-row">
+    <po-widget *ngFor="let user of users"
+               (click)="showValue = true;"
+               class="po-md-3 po-lg-3 po-xl-4"
+               [p-title]="user.name">
+
+      <po-info p-orientation="horizontal"
+               p-label="Pontuação"
+               [p-value]="user.points | number : '1.2-3'">
+      </po-info>
+
+      <po-info p-orientation="horizontal"
+               *ngIf="showValue"
+               p-label="Pontuação Total"
+               [p-value]="user.points">
+      </po-info>
+
+    </po-widget>
+  </div>
+</po-page-default>
+
+<po-modal #gameModal
+          [p-primary-action]="gameModalActionPrimary"
+          [p-secondary-action]="gameModalActionSecondary"
+          p-size="xl">
+
+  <div class="po-row po-md-12 po-lg-12 po-xl-12">
+    <p class="question">{{ questionText }}</p>
+  </div>
+
+  <div class="po-row">
+    <div class="po-md-12 po-lg-12 po-xl-12">
+      <p class="timer-box" [ngClass]="{'red': timer <= 5}">{{ timer | number : '1.2-2' }}</p>
+    </div>
+  </div>
+
+  <div class="po-row bottom-modal" *ngIf="isShowAnswers">
+    <div class="po-md-12 po-lg-12 po-xl-12">
+      <po-chart [p-series]="chartAnswers"
+                [p-type]="chartAnswersType">
+      </po-chart>
+    </div>
+  </div>
+</po-modal>
