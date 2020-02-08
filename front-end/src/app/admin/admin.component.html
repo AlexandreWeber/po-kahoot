@@ -45,3 +45,18 @@
     </div>
   </div>
 </po-modal>
+
+<po-modal #passwordModal 
+					[p-primary-action]="passwordActionPrimary"
+					(keyup.enter)="validatePassword()"
+					p-click-out="false"
+    			p-hide-close="true">
+	
+	<p>Tem certeza que você deveria estar aqui?</p>
+	
+	<po-password name="password"
+							 [(ngModel)]="password"
+  						 p-label="Super senha secreta">
+	</po-password>
+
+</po-modal>

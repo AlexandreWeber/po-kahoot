@@ -15,6 +15,7 @@ export class AdminComponent implements OnInit {
   currentQuestion = 0;
 
   currentAnswers = [];
+	
 
   pageActions: Array<PoPageAction>;
 
@@ -30,6 +31,8 @@ export class AdminComponent implements OnInit {
   gameModalActionPrimary: PoModalAction;
   gameModalActionSecondary: PoModalAction;
 
+	passwordActionPrimary: PoModalAction;
+
   colors = ['red', 'red', 'red', 'red'];
 
   timer = 20;
@@ -38,12 +41,16 @@ export class AdminComponent implements OnInit {
 
   numberOfAnswers = 0;
 
+	password = '';
+
   @ViewChild('gameModal', { static: true}) gameModal: PoModalComponent;
+	@ViewChild('passwordModal', { static: true}) passwordModal: PoModalComponent;
 
   constructor(public socket: Socket,
               public notification: PoNotificationService) { }
 
   ngOnInit() {
+		this.passwordModal.open();
     this.setUpComponents();
 
     this.socket.on('newUser', user => {
@@ -95,7 +102,8 @@ export class AdminComponent implements OnInit {
     this.pageActions = [
       {
         label: 'Iniciar Jogo',
-        action: () => this.startGame()
+        action: () => this.startGame(),
+				disabled: () => this.password !== 'supersenha'
       }
     ];
 
@@ -108,6 +116,11 @@ export class AdminComponent implements OnInit {
       action: () => this.showAnsers(),
       label: 'Ver respostas'
     }
+
+		this.passwordActionPrimary = {
+			action: () => this.validatePassword(),
+			label: 'Acessar'
+		}
 
   }
 
@@ -170,4 +183,12 @@ export class AdminComponent implements OnInit {
   showAnsers() {
     this.isShowAnswers = true;
   }
+
+	validatePassword() {
+		if (this.password === 'supersenha') {
+			this.passwordModal.close()
+		} else {
+			this.notification.error('Senha errada! Você deveria mesmo estar aqui?')
+		}
+	}
 }
