@@ -5,16 +5,16 @@ import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game.component';
 import { FormsModule } from '@angular/forms';
 import { PoModule } from '@portinari/portinari-ui';
-import { AnswerComponent } from '../shared/components/answer/answer.component';
-
+import { SharedModule } from '../shared/module/shared/shared.module';
 
 @NgModule({
-  declarations: [GameComponent, AnswerComponent],
+  declarations: [GameComponent],
   imports: [
     CommonModule,
     GameRoutingModule,
     PoModule,
-    FormsModule
+    FormsModule,
+		SharedModule
   ]
 })
 export class GameModule { }

@@ -31,11 +31,42 @@
     <p class="question">{{ questionText }}</p>
   </div>
 
+
   <div class="po-row">
     <div class="po-md-12 po-lg-12 po-xl-12">
       <p class="timer-box" [ngClass]="{'red': timer <= 5}">{{ timer | number : '1.2-2' }}</p>
     </div>
   </div>
+
+	<div class="po-row po-md-12 po-lg-12 po-xl-12" *ngIf="answers[0]">
+			<div class="po-row">
+				<div class="po-row po-md-6 po-lg-6 po-xl-6">
+					<div class="option" style="background-color: #0c9abe;">
+						<p class="option-text">{{ answers[0].text }}</p>
+					</div>
+				</div>
+
+				<div class="po-row po-md-6 po-lg-6 po-xl-6">
+					<div class="option" style="background-color: #ab4391;">
+						<p class="option-text">{{ answers[1].text }}</p>
+					</div>
+				</div>
+      </div>
+
+      <div class="po-row">
+				<div class="po-row po-md-6 po-lg-6 po-xl-6">
+					<div class="option" style="background-color: #ea9b3e;">
+						<p class="option-text">{{ answers[2].text }}</p>
+					</div>
+				</div>
+				<div class="po-row po-md-6 po-lg-6 po-xl-6">
+					<div class="option" style="background-color: #abc249;">
+						<p class="option-text">{{ answers[3].text }}</p>
+					</div>
+				</div>
+      </div>
+	</div>
+
 
   <div class="po-row bottom-modal" *ngIf="isShowAnswers">
     <div class="po-md-12 po-lg-12 po-xl-12">

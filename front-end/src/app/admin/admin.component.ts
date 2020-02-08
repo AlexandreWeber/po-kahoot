@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { PoNotificationService, PoPageAction, PoModalComponent, PoModalAction, PoPieChartSeries, PoChartType } from '@portinari/portinari-ui';
-import { questions } from './questions';
+import { QuestionsService } from '../shared/services/questions.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,6 +16,7 @@ export class AdminComponent implements OnInit {
 
   currentAnswers = [];
 	
+	questions = [];
 
   pageActions: Array<PoPageAction>;
 
@@ -25,6 +26,8 @@ export class AdminComponent implements OnInit {
   chartAnswersType: PoChartType = PoChartType.Pie;
 
   questionText = '';
+
+	answers = [];
 
   showValue = false;
 
@@ -47,7 +50,8 @@ export class AdminComponent implements OnInit {
 	@ViewChild('passwordModal', { static: true}) passwordModal: PoModalComponent;
 
   constructor(public socket: Socket,
-              public notification: PoNotificationService) { }
+              public notification: PoNotificationService,
+							public questionsService: QuestionsService) { }
 
   ngOnInit() {
 		this.passwordModal.open();
@@ -61,7 +65,7 @@ export class AdminComponent implements OnInit {
     this.socket.on('receiveAnswer', answer => {
       this.users.map((user) => {
         if (user.name === answer.user) {
-          if(questions[this.currentQuestion - 1].correctAnswer === answer.option) {
+          if(this.questions[this.currentQuestion - 1].correctAnswer === answer.option) {
             user.points += 200 * this.timer;
           }
         }
@@ -87,7 +91,7 @@ export class AdminComponent implements OnInit {
 
   generateChart() {
     this.chartAnswers = [];
-    questions[this.currentQuestion - 1].options.map((option, index) => {
+    this.questions[this.currentQuestion - 1].options.map((option, index) => {
       this.chartAnswers.push(
         {
           category: option.text,
@@ -101,10 +105,16 @@ export class AdminComponent implements OnInit {
   setUpComponents() {
     this.pageActions = [
       {
-        label: 'Iniciar Jogo',
-        action: () => this.startGame(),
+        label: 'Iniciar Jogo Front',
+        action: () => this.startGame('front'),
+				disabled: () => this.password !== 'supersenha'
+      },
+			{
+        label: 'Iniciar Jogo Back',
+        action: () => this.startGame('back'),
 				disabled: () => this.password !== 'supersenha'
       }
+
     ];
 
     this.gameModalActionPrimary = {
@@ -136,30 +146,33 @@ export class AdminComponent implements OnInit {
     })
   }
 
-  startGame() {
+  async startGame(type) {
     this.currentQuestion = 0;
+		this.questions = await this.questionsService.getQuestions(type);
 
-    const question = questions[this.currentQuestion];
+    const question = this.questions[this.currentQuestion];
     this.currentQuestion++;
     this.socket.emit('startGame', question);
 
     this.questionText = question.text;
+		this.answers = question.options;
     this.gameModal.open();
     this.generateChart();
     this.startTimer();
   }
 
   nextQuestion() {
-    if (this.currentQuestion === questions.length) {
+    if (this.currentQuestion === this.questions.length) {
       this.notification.success('Fim de Jogo');
       this.gameModal.close();
       this.socket.emit('endGame');
     }
-    const question = questions[this.currentQuestion];
+    const question = this.questions[this.currentQuestion];
     this.currentQuestion++;
     this.socket.emit('nextQuestion', question);
 
     this.questionText = question.text;
+		this.answers = question.options;
     this.timer = 20;
     this.currentAnswers = [];
     this.isShowAnswers = false;
